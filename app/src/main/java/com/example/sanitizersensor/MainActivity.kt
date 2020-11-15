@@ -14,9 +14,7 @@ import android.os.Vibrator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-
+import com.google.firebase.database.*
 
 
 class MainActivity: AppCompatActivity(), SensorEventListener {
@@ -57,7 +55,6 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
 
         //initialize the sanitizer left as 30 drops
         sanitizer.setValue(sanitizertotalAmount.toString())
-
 
     }
 
