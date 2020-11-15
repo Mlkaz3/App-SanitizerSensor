@@ -1,0 +1,185 @@
+{
+  "project_info": {
+    "project_number": "556095000529",
+    "firebase_url": "https://solenoid-lock-f65e8.firebaseio.com",
+    "project_id": "solenoid-lock-f65e8",
+    "storage_bucket": "solenoid-lock-f65e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:6f63de8ce5831116211af0",
+        "android_client_info": {
+          "package_name": "com.example.doorsys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:b9901f4151b0e304211af0",
+        "android_client_info": {
+          "package_name": "com.example.openthedoor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:faa3554072f74340211af0",
+        "android_client_info": {
+          "package_name": "com.example.sanitizersensor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:8a798fe82295987f211af0",
+        "android_client_info": {
+          "package_name": "com.example.solenoiddoor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:084f508598222d0f211af0",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.iotassignment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556095000529:android:82fcab1a85d263b8211af0",
+        "android_client_info": {
+          "package_name": "my.edu.tarc.lightsensor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCw7OIwSPvgbGa3njJboIq0UnCiHqNa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556095000529-43vg4mdq6t5n3r3c05he30qsgv96nfkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
