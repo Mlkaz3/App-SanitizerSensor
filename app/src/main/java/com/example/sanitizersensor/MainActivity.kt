@@ -65,9 +65,8 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(sensorEvent: SensorEvent) {
         //when a hand is near
         if(sensorEvent.values[0].toDouble() == 0.0){
-
             //when sanitizer still available
-            if(sanitizertotalAmount > 1){
+            if(sanitizertotalAmount > 0){
                 //update sanitizer left
                 sanitizertotalAmount -= 1
                 //write to UI
@@ -75,23 +74,24 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 textview!!.text = "Ps! Here's your sanitizer"
                 //write reaction when sanitizer dispense to common resources database : Green Light
                 lcdbkG.setValue("255")
+                lcdbkR.setValue("0")
                 //write to resources left firebase
                 sanitizer.setValue(sanitizertotalAmount.toString())
 
+
+                //to make a auto update value scene
+                if(sanitizertotalAmount == 0){
+                    Thread.sleep(5_000)
+                    //write to UI
+                    sanLeft!!.text = "No more sanitizer left"
+                    //no more sanitizer, set to Red Light
+                    lcdbkR.setValue("255")
+                    //write to resources left firebase
+                    sanitizer.setValue("Please Re-fill")
+                    //send message to worker to refill sanitizer
+                    //debugging
+                }
             }
-            else{
-
-                //write to UI
-                sanLeft!!.text = "No more sanitizer left"
-                //no more sanitizer, set to Red Light
-                lcdbkR.setValue("255")
-                //write to resources left firebase
-                sanitizer.setValue("Please Re-fill")
-                //send message to worker to refill sanitizer
-                //debugging
-            }
-
-
         }
         else{
             textview!!.text = "No human detected."
