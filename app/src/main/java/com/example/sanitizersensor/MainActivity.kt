@@ -1,10 +1,8 @@
 package com.example.sanitizersensor
 //Thread.sleep(5_000)
 //use this code to wait for 5 seconds
-import android.app.AlertDialog
-import android.app.Dialog
+
 import android.content.Context
-import android.content.DialogInterface
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,37 +11,54 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.google.firebase.database.*
 
-
 class MainActivity: AppCompatActivity(), SensorEventListener {
+    //secondary firebase
+    val secondary = FirebaseDatabase.getInstance("https://bait2123-202010-03.firebaseio.com/")
+    val lcdbkG = secondary.getReference("PI_03_CONTROL").child("lcdbkG");
+    val lcdbkR = secondary.getReference("PI_03_CONTROL").child("lcdbkR");
+
+    //primary firebase
+    val primary: FirebaseDatabase = FirebaseDatabase.getInstance("https://solenoid-lock-f65e8.firebaseio.com/")
+    val room: DatabaseReference = primary.getReference("Room")
+    val sanitizer = primary.getReference("Room").child("Room1").child("SanitizerLeft")
+
+    //variables
     var textview: TextView? = null
     var sanLeft:TextView? = null
     var sensorManager: SensorManager? = null
     var proximitySensor: Sensor? = null
     var isProximitySensorAvailable: Boolean? = null
     var vibrator: Vibrator? = null
-    var sanitizertotalAmount:Int = 5
-
-    val secondary = FirebaseDatabase.getInstance("https://bait2123-202010-03.firebaseio.com/")
-    val lcdbkG = secondary.getReference("PI_03_CONTROL").child("lcdbkG");
-    val lcdbkR = secondary.getReference("PI_03_CONTROL").child("lcdbkR");
-
-    //write to our firebase
-    val primary = FirebaseDatabase.getInstance("https://solenoid-lock-f65e8.firebaseio.com/")
-    val sanitizer: DatabaseReference = primary.getReference("Room").child("Room1").child("sanitizerLeft");
+    var Sanitizer: Int ?= null
+    var limitSanitize: Int ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //accessing the proximity sensor
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+        //accessing UI
         textview = findViewById<TextView>(R.id.textView)
         sanLeft = findViewById<TextView>(R.id.sanLeft)
-        sanLeft!!.text = "$sanitizertotalAmount drops sanitizer left"
 
+        //read sanitizer available from firebase
+        room.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                //storing the amount into code variable
+                var totalSanitizer = dataSnapshot.child("Room1").child("SanitizerLeft").value.toString().toInt();
+                var limitSanitizer = dataSnapshot.child("Room1").child("noOfPax").value.toString().toInt();
+                Sanitizer = totalSanitizer
+                limitSanitize = limitSanitizer
+                sanLeft!!.text = "$Sanitizer drops sanitizer left"
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+
+        //accessing the proximity sensor
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager?
         if (sensorManager!!.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null) {
             proximitySensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_PROXIMITY)
@@ -53,44 +68,42 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
             isProximitySensorAvailable = false
         }
 
-        //initialize the sanitizer left as 30 drops
-        sanitizer.setValue(sanitizertotalAmount.toString())
-
     }
 
     //when sensor is changing value, we need update the output firebase and storage left firebase
     override fun onSensorChanged(sensorEvent: SensorEvent) {
+
         //when a hand is near
         if(sensorEvent.values[0].toDouble() == 0.0){
             //when sanitizer still available
-            if(sanitizertotalAmount > 0){
+            if(Sanitizer!! > 0){
+
+
+
                 //update sanitizer left
-                sanitizertotalAmount -= 1
+                Sanitizer = Sanitizer!! -1
                 //write to UI
-                sanLeft!!.text = "$sanitizertotalAmount drops sanitizer left"
+                sanLeft!!.text = "$Sanitizer drops sanitizer left"
                 textview!!.text = "Ps! Here's your sanitizer"
                 //write reaction when sanitizer dispense to common resources database : Green Light
                 lcdbkG.setValue("255")
                 lcdbkR.setValue("0")
                 //write to resources left firebase
-                sanitizer.setValue(sanitizertotalAmount.toString())
+                sanitizer.setValue(Sanitizer.toString())
 
 
                 //to make a auto update value scene
-                if(sanitizertotalAmount == 0){
+                if(Sanitizer == 0){
                     Thread.sleep(5_000)
-                    //write to UI
-                    sanLeft!!.text = "No more sanitizer left"
                     //no more sanitizer, set to Red Light
                     lcdbkR.setValue("255")
-                    //write to resources left firebase
-                    sanitizer.setValue("Please Re-fill")
                     //send message to worker to refill sanitizer
                     //debugging
                 }
             }
         }
         else{
+            sanLeft!!.text = "No more sanitizer left"
             textview!!.text = "No human detected."
             lcdbkG.setValue("0")
         }
