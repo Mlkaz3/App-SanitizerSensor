@@ -2,6 +2,11 @@ package com.example.sanitizersensor
 //Thread.sleep(5_000)
 //use this code to wait for 5 seconds
 
+//TO DO LIST
+//refresh the sanitizerUsed once the user logout/ stop booking
+//msg the worker if sanitizer is out of stock
+//the problem is top up dy no changes taken in the red light Ops : this bug solve
+
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -53,7 +58,7 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
         finish = MediaPlayer.create(this, R.raw.finish);
         limit = MediaPlayer.create(this, R.raw.limit);
 
-        //initialise database
+        //initialise firebase value
         lcdbkG.setValue("0")
         lcdbkR.setValue("0")
         lcdbkB.setValue("0")
@@ -69,6 +74,11 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 limitSanitize = limitSanitizer
                 userSanitize = usedSanitizer
                 sanLeft!!.text = "$Sanitizer drops sanitizer left"
+
+                //if the sanitizer is top up dy: chg the red light to no red light
+                if(Sanitizer!=0){
+                    lcdbkR.setValue("0")
+                }
 
             }
             override fun onCancelled(error: DatabaseError) {
@@ -90,7 +100,6 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
 
     //when sensor is changing value, we need update the output firebase and storage left firebase
     override fun onSensorChanged(sensorEvent: SensorEvent) {
-
         //when a hand is near
         if(sensorEvent.values[0].toDouble() == 0.0){
             userSanitize = userSanitize?.plus(1)
@@ -101,6 +110,8 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 //check if the user use more than limit
                 //if yes: play limit()
                 if(userSanitize!! > this!!.limitSanitize!!){
+                    //blue light shows if they use too much
+                    lcdbkB.setValue("255")
                     playlimit()
                 }
 
@@ -114,18 +125,21 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                     //write reaction when sanitizer dispense to common resources database : Green Light
                     lcdbkG.setValue("255")
                     lcdbkR.setValue("0")
+                    lcdbkB.setValue("0")
                     //write data to firebase
                     sanitizer.setValue(Sanitizer.toString())
                     sanitizerUsed.setValue(userSanitize.toString())
+                    //inform the people :) idk how to do yet
                 }
                 if(Sanitizer ==0){
-                    Thread.sleep(1000L)
+                    Thread.sleep(5000L)
                     //set to red light cause no more dy but no nee notify user unless they try to get
                     lcdbkR.setValue("255")
                 }
 
             }
             else{
+                lcdbkR.setValue("255")
                 sanLeft!!.text = "No more sanitizer left"
                 playFinish()
             }
