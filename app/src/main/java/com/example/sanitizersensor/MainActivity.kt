@@ -7,7 +7,9 @@ package com.example.sanitizersensor
 //msg the worker if sanitizer is out of stock
 //the problem is top up dy no changes taken in the red light Ops : this bug solve
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,9 +17,12 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Vibrator
+import android.telephony.SmsManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.firebase.database.*
+
 
 class MainActivity: AppCompatActivity(), SensorEventListener {
     //secondary firebase
@@ -66,6 +71,15 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
         //read sanitizer available from firebase
         room.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(
+                        Manifest.permission.SEND_SMS,
+                        Manifest.permission.READ_SMS
+                    ),
+                    PackageManager.PERMISSION_GRANTED
+                )
                 //storing the amount into code variable
                 var totalSanitizer = dataSnapshot.child("Room1").child("sanitizerLeft").value.toString().toInt();
                 var limitSanitizer = dataSnapshot.child("Room1").child("noOfPax").value.toString().toInt();
@@ -157,12 +171,39 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 lcdbkR.setValue("255")
                 sanLeft!!.text = "No more sanitizer left"
                 playFinish()
+                sendMail()
+                //sendMsg()
             }
         }
         else{
             textview!!.text = "No human detected."
             lcdbkG.setValue("0")
         }
+    }
+
+//    private fun sendMail() {
+//        try {
+//            val sender = GMailSender("username@gmail.com", "password")
+//            sender.sendMail(
+//                "This is Subject",
+//                "This is Body",
+//                "user@gmail.com",
+//                "user@yahoo.com"
+//            )
+//        } catch (e: Exception) {
+//            Log.e("SendMail", e.message, e)
+//        }
+//    }
+
+
+    private fun sendMsg() {
+        //source
+        //https://www.thecodecity.com/2017/07/send-email-from-android-app-directly.html
+        val message:String = "The sanitizer is finished."
+        val number:String ="60162635833"
+
+        val mySmsManager: SmsManager = SmsManager.getDefault()
+        mySmsManager.sendTextMessage(number, null, message, null, null)
     }
 
     private fun playFinish() {
