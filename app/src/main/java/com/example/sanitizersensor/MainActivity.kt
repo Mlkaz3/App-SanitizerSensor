@@ -58,7 +58,7 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
         finish = MediaPlayer.create(this, R.raw.finish);
         limit = MediaPlayer.create(this, R.raw.limit);
 
-        //initialise firebase value
+        //initialise firebase value: this code should be move to somewhere else, cant impossible every time we run the application, the led restart
         lcdbkG.setValue("0")
         lcdbkR.setValue("0")
         lcdbkB.setValue("0")
@@ -76,8 +76,22 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 sanLeft!!.text = "$Sanitizer drops sanitizer left"
 
                 //if the sanitizer is top up dy: chg the red light to no red light
-                if(Sanitizer!=0){
+                if(Sanitizer!! > 0){
+                    //set the red light to zero
                     lcdbkR.setValue("0")
+
+                    //if the no of pax and limited sanitizer is not matched
+                    if(limitSanitize!! > userSanitize!!){
+                        lcdbkB.setValue("0")
+                    }
+                    else {
+                        lcdbkB.setValue("255")
+                    }
+                }
+                else{
+                    lcdbkR.setValue("255")
+                    lcdbkG.setValue("0")
+                    lcdbkB.setValue("0")
                 }
 
             }
@@ -110,9 +124,9 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 //check if the user use more than limit
                 //if yes: play limit()
                 if(userSanitize!! > this!!.limitSanitize!!){
+                    playlimit()
                     //blue light shows if they use too much
                     lcdbkB.setValue("255")
-                    playlimit()
                 }
 
                 //if no: continue to check stock ability
@@ -130,13 +144,14 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                     sanitizer.setValue(Sanitizer.toString())
                     sanitizerUsed.setValue(userSanitize.toString())
                     //inform the people :) idk how to do yet
-                }
-                if(Sanitizer ==0){
-                    Thread.sleep(5000L)
-                    //set to red light cause no more dy but no nee notify user unless they try to get
-                    lcdbkR.setValue("255")
-                }
 
+                    if(userSanitize!! == this!!.limitSanitize!!){
+                        //take 3 seconds to update the sanitizer
+                        Thread.sleep(3_000)
+                        //blue light shows if they use too much
+                        lcdbkB.setValue("255")
+                    }
+                }
             }
             else{
                 lcdbkR.setValue("255")
@@ -148,7 +163,6 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
             textview!!.text = "No human detected."
             lcdbkG.setValue("0")
         }
-
     }
 
     private fun playFinish() {
