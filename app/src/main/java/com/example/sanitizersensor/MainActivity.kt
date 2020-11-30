@@ -30,6 +30,7 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
     val lcdbkG = secondary.getReference("PI_03_CONTROL").child("lcdbkG");
     val lcdbkR = secondary.getReference("PI_03_CONTROL").child("lcdbkR");
     val lcdbkB = secondary.getReference("PI_03_CONTROL").child("lcdbkB");
+    val lcdtxt = secondary.getReference("PI_03_CONTROL").child("lcdtxt");
 
     //primary firebase
     val primary: FirebaseDatabase = FirebaseDatabase.getInstance("https://solenoid-lock-f65e8.firebaseio.com/")
@@ -108,6 +109,7 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                     lcdbkB.setValue("0")
                 }
 
+                lcdtxt.setValue("SANITIZERLEFT=" + String.format("%02d", Sanitizer))
             }
             override fun onCancelled(error: DatabaseError) {
             }
@@ -171,10 +173,9 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 lcdbkR.setValue("255")
                 sanLeft!!.text = "No more sanitizer left"
                 playFinish()
-                sendMail()
-                //sendMsg()
             }
         }
+
         else{
             textview!!.text = "No human detected."
             lcdbkG.setValue("0")
