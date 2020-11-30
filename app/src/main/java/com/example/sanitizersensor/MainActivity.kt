@@ -69,17 +69,16 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
         lcdbkR.setValue("0")
         lcdbkB.setValue("0")
 
-        //read sanitizer available from firebase
         room.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 ActivityCompat.requestPermissions(
-                    this@MainActivity,
-                    arrayOf(
-                        Manifest.permission.SEND_SMS,
-                        Manifest.permission.READ_SMS
-                    ),
-                    PackageManager.PERMISSION_GRANTED
+                        this@MainActivity,
+                        arrayOf(
+                                Manifest.permission.SEND_SMS,
+                                Manifest.permission.READ_SMS
+                        ),
+                        PackageManager.PERMISSION_GRANTED
                 )
                 //storing the amount into code variable
                 var totalSanitizer = dataSnapshot.child("Room1").child("sanitizerLeft").value.toString().toInt();
@@ -109,7 +108,6 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                     lcdbkB.setValue("0")
                 }
 
-                lcdtxt.setValue("SANITIZERLEFT=" + String.format("%02d", Sanitizer))
             }
             override fun onCancelled(error: DatabaseError) {
             }
@@ -173,29 +171,15 @@ class MainActivity: AppCompatActivity(), SensorEventListener {
                 lcdbkR.setValue("255")
                 sanLeft!!.text = "No more sanitizer left"
                 playFinish()
+                //sendMail()
+                //sendMsg()
             }
         }
-
         else{
             textview!!.text = "No human detected."
             lcdbkG.setValue("0")
         }
     }
-
-//    private fun sendMail() {
-//        try {
-//            val sender = GMailSender("username@gmail.com", "password")
-//            sender.sendMail(
-//                "This is Subject",
-//                "This is Body",
-//                "user@gmail.com",
-//                "user@yahoo.com"
-//            )
-//        } catch (e: Exception) {
-//            Log.e("SendMail", e.message, e)
-//        }
-//    }
-
 
     private fun sendMsg() {
         //source
